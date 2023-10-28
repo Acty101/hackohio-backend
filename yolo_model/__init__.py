@@ -1,1 +1,2 @@
-from main import DetectModel
+from .main import DetectModel
+
