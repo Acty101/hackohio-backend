@@ -17,8 +17,9 @@ RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 RUN pip3 install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
 
 # Copy over all files/folders
-COPY app.py process.py ./
+COPY dydb ./dydb/
 COPY yolo_model/__init__.py yolo_model/main.py ./yolo_model/
 COPY config ./config
+COPY app.py shared_utils.py ./
 
 ENTRYPOINT [ "flask", "run","--host","0.0.0.0","--port","5000"]
