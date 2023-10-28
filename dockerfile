@@ -12,9 +12,9 @@ RUN apt-get update -y && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Object-detection + LangChain + Flask dep
+RUN pip3 install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
 COPY requirements.txt .
 RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt
-RUN pip3 install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
 
 # Copy over all files/folders
 COPY dydb ./dydb/
