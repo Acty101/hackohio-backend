@@ -13,7 +13,7 @@ RUN apt-get update -y && \
 
 # Object-detection + LangChain + Flask dep
 COPY requirements.txt .
-RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt boto3
 RUN pip3 install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
 
 # Copy over all files/folders
