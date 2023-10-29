@@ -1,2 +1,8 @@
 Flask
 boto3
+# lanchain
+langchain
+unstructured
+openai
+chromadb
+tiktoken
