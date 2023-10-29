@@ -1,7 +1,6 @@
 import base64
 import os
 import yaml
-from exif import Image
 
 
 def generate_file_from_output(
