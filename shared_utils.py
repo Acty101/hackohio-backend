@@ -1,5 +1,7 @@
 import base64
 import os
+import yaml
+from exif import Image
 
 
 def generate_file_from_output(
@@ -13,3 +15,12 @@ def generate_file_from_output(
     with open(img_path, "wb") as f:
         f.write(imgdata)
     return img_path
+
+
+def get_prompt(prompt_path: str, cat_path: str):
+    """Configure prompt to be suitable for input to LangChainURL"""
+    f = open(prompt_path, "r")
+    with open(cat_path, "r") as file:
+        yaml_data = yaml.safe_load(file)
+    supercategories = yaml_data.get("categories")
+    return f"{f.readline()}{', '.join(supercategories)}\n{f.read()}"
