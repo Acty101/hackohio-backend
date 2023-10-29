@@ -2,6 +2,7 @@ import boto3
 import os
 import typing
 
+
 class DYDB:
     def __init__(
         self,
@@ -11,12 +12,12 @@ class DYDB:
         region_name=os.environ.get("AWS_DEFAULT_REGION", None),
     ) -> None:
         self.table = table
-        self.dydb = boto3.client(
-            "dynamodb",
+        self.dydb = boto3.session.Session(
             aws_access_key_id=aws_access_key_id,
             aws_secret_access_key=aws_secret_access_key,
             region_name=region_name,
-        )
+            aws_session_token=os.environ.get("AWS_SESSION_TOKEN", None)
+        ).client("dynamodb")
 
     def create(self, data: typing.Dict) -> None:
         self.dydb.put_item(TableName=self.table, Item=self.mapper(data)["M"])

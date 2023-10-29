@@ -1,1 +1,1 @@
-from .main import LangChainURL
+from .main import LangChainURL, LangChainOutput

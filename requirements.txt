@@ -4,5 +4,5 @@ boto3
 langchain
 unstructured
 openai
-chromadb
+faiss-cpu
 tiktoken

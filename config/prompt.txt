@@ -1,5 +1,5 @@
 Classify the comma separated list of objects at the end into the following categories:  
-Use the context to give instructions on how to dispose of the classified items in the list at the bottom. Each instruction should be detailed, but not more than two sentences. Include any extra instructions associated with recycling the object. Output in this format: object name~category~instruction. Separate each triplet with a new line.
+Use the context to give instructions on how to dispose each of the classified items in the list at the bottom. Give instructions on each of the items even if two of the objects have the same name. If two or more objects have the same name, then return instructions for both objects separately. For example, if the list of objects is ["glass bottle", "glass bottle"], then return instructions for each instance of glass bottles in the list of objects. Each instruction should be detailed, but not more than two sentences. Include any extra instructions associated with recycling the object. Output in this format: object name~category~instruction. Separate each triplet with a new line.
 {context}
 list of objects: {question}
 Helpful Answer:

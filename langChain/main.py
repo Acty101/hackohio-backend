@@ -5,11 +5,19 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+from langchain.vectorstores import FAISS
+from langchain.indexes import VectorstoreIndexCreator
+from collections import defaultdict
+from typing import List
 import os
 import shutil
-from dotenv import load_dotenv
+from enum import Enum
 
-load_dotenv()
+
+class LangChainOutput(Enum):
+    ITEM = 0
+    SUPERCATEGORY = 1
+    INSTRUCTIONS = 2
 
 
 class LangChainURL:
@@ -18,7 +26,7 @@ class LangChainURL:
     def __init__(
         self,
         prompt: str,
-        url: list[str] = [
+        url: List[str] = [
             "https://www.a2gov.org/departments/trash-recycling/pages/recycling.aspx"
         ],
     ) -> None:
@@ -45,8 +53,12 @@ class LangChainURL:
         embedding = OpenAIEmbeddings()
 
         # Create the vectordb
-        vectordb = Chroma.from_documents(
-            documents=splits, embedding=embedding, persist_directory=PERSIST_DIRECTORY
+        #vectordb = Chroma.from_documents(
+        #    documents=splits, embedding=embedding, persist_directory=PERSIST_DIRECTORY
+        #)
+
+        vectordb = FAISS.from_documents(
+            documents = splits, embedding = embedding
         )
 
         # Create the llm
@@ -63,6 +75,22 @@ class LangChainURL:
             chain_type_kwargs={"prompt": QA_CHAIN_PROMPT},
         )
 
-    def infer(self, question: str) -> str:
+    def infer(self, question: List[str]) -> List[dict]:
         """Run inference on question"""
-        return self.qa_chain({"query": question})["result"]
+
+        # {LangChainOutput.ITEM: str, LangChainOutput.SUPERCATEGORY: str }
+        self.sc_count = defaultdict(int)
+        questionStr = ", ".join(question)
+        output = self.qa_chain({"query": questionStr})["result"]
+        outputList = output.split("\n")
+        objList = []
+        for str in outputList:
+            list = str.split("~")
+            temp = {
+                LangChainOutput.ITEM: list[0],
+                LangChainOutput.SUPERCATEGORY: list[1],
+                LangChainOutput.INSTRUCTIONS: list[2],
+            }
+            self.sc_count[list[1]] += 1
+            objList.append(temp)
+        return objList
